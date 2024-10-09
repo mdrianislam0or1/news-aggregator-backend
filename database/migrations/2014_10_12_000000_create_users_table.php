@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
+    /**  
+     * Run the migrations.  
      */
     public function up()
     {
@@ -16,12 +16,14 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('role')->default('user');
+            $table->json('preferences')->nullable();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
+    /**  
+     * Reverse the migrations.  
      */
     public function down(): void
     {
