@@ -25,7 +25,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'preferences' => $request->preferences ? json_encode($request->preferences) : null, // Store as JSON  
+            'preferences' => $request->preferences ? json_encode($request->preferences) : null,
         ]);
 
         return response()->json([
@@ -33,7 +33,7 @@ class AuthController extends Controller
             'user' => [
                 'name' => $user->name,
                 'email' => $user->email,
-                'preferences' => json_decode($user->preferences), // Decode preferences here  
+                'preferences' => json_decode($user->preferences),
                 'created_at' => $user->created_at,
                 'updated_at' => $user->updated_at,
                 'id' => $user->id,
@@ -56,22 +56,19 @@ class AuthController extends Controller
             ]);
         }
 
-        // Custom response to ensure we return fields we need  
         $userResponse = [
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
-            'role' => $user->role, // Make sure to get the role object  
+            'role' => $user->role,
             'created_at' => $user->created_at,
             'updated_at' => $user->updated_at,
         ];
 
         return response()->json(['message' => 'Login successful.', 'user' => $userResponse]);
     }
-    // Optional: Logout User (Token-based)  
     public function logout()
     {
-        // Handle logout logic (e.g., invalidate a token)  
         return response()->json(['message' => 'Logout successful.']);
     }
 }

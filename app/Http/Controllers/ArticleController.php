@@ -11,39 +11,44 @@ class ArticleController extends Controller
     // Method to fetch all articles with search and filtering  
     public function index(Request $request)
     {
-        // Initialize the query  
+        // Start with a query builder for the Article model
         $query = Article::query();
 
-        // Search by keyword  
-        if ($request->has('keyword')) {
-            $keyword = $request->input('keyword');
-            $query->where('title', 'LIKE', "%{$keyword}%")
-                ->orWhere('description', 'LIKE', "%{$keyword}%");
+        // Check if search query is provided
+        if ($request->has('search')) {
+            $searchTerm = $request->input('search');
+
+            // Search in 'title' or 'description' or any other fields
+            $query->where('title', 'LIKE', '%' . $searchTerm . '%')
+                ->orWhere('description', 'LIKE', '%' . $searchTerm . '%');
         }
 
-        // Filter by category  
+        // Filtering by category
         if ($request->has('category')) {
-            $query->where('category', $request->input('category'));
+            $category = $request->input('category');
+            $query->where('category_id', $category);
         }
 
-        // Filter by source  
-        if ($request->has('source')) {
-            $query->where('source', $request->input('source'));
+        // Filtering by author
+        if ($request->has('author')) {
+            $author = $request->input('author');
+            $query->where('author_id', $author);
         }
 
-        // Filter by date (e.g., created_at)  
-        if ($request->has('from_date')) {
-            $query->whereDate('created_at', '>=', $request->input('from_date'));
-        }
-        if ($request->has('to_date')) {
-            $query->whereDate('created_at', '<=', $request->input('to_date'));
+        // Sorting by creation date (default to latest)
+        if ($request->has('sort_by') && $request->input('sort_by') == 'oldest') {
+            $query->orderBy('created_at', 'asc');
+        } else {
+            $query->orderBy('created_at', 'desc');
         }
 
-        // Execute the query and get results  
+        // Execute the query and get the results
         $articles = $query->get();
 
-        return response()->json($articles);
+        // Return the articles in JSON format
+        return response()->json($articles); // image_url will be included automatically if part of the model
     }
+
 
     // Method to fetch personalized news feed based on user preferences  
     public function personalizedFeed(Request $request)

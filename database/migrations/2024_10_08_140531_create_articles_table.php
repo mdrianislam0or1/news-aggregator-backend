@@ -15,9 +15,11 @@ class CreateArticlesTable extends Migration
             $table->string('url')->unique();
             $table->string('source');
             $table->string('category')->nullable();
+            $table->string('image_url', 255)->nullable();
             $table->timestamps();
         });
     }
+
 
     public function down()
     {

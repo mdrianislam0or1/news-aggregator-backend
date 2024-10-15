@@ -14,6 +14,7 @@ class Article extends Model
         'description',
         'url',
         'source',
-        'category'
+        'category',
+        'image_url',
     ];
 }
